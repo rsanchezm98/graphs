@@ -3,7 +3,15 @@
 
 namespace graph
 {
-    enum class state{WHITE, GREY, BLACK};
+    enum class State{WHITE, GREY, BLACK};
+
+    struct Node
+    {
+        State status;
+        size_t distance;
+        size_t id;
+        size_t parent_id;
+    };
 
     class Graph
     {
@@ -25,14 +33,15 @@ namespace graph
             std::vector<std::vector<size_t>> GetGraph();
 
             // BFS
-            bool BFS(const std::vector<std::vector<size_t>>& graph, const size_t origin);
+            bool BFS(const std::vector<std::vector<size_t>>& graph, std::vector<Node>& nodes, const size_t origin);
 
             //D FS
-            bool DFS(const std::vector<std::vector<size_t>>& graph, const size_t origin);
+            bool DFS(const std::vector<std::vector<size_t>>& graph, std::vector<Node>& nodes, const size_t origin);
 
         private:
 
             size_t m_size_of_graph;
             std::vector<std::vector<size_t>> m_graph;
+            std::vector<Node> m_nodes;
     }
 }
