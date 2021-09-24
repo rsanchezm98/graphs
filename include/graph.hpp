@@ -1,9 +1,10 @@
 #include <vector>
 #include <iostream>
+#include <deque>
 
 namespace graph
 {
-    enum class State{WHITE, GREY, BLACK};
+    enum class State{WHITE, GRAY, BLACK};
 
     struct Node
     {
@@ -35,11 +36,13 @@ namespace graph
             // BFS
             bool BFS(const std::vector<std::vector<size_t>>& graph, std::vector<Node>& nodes, const size_t origin);
 
-            //D FS
+            // DFS
             bool DFS(const std::vector<std::vector<size_t>>& graph, std::vector<Node>& nodes, const size_t origin);
-
+            
+            // Print Nodes Info
+            void Graph::PrintNodes(const std::vector<Node>& nodes);
+            
         private:
-
             size_t m_size_of_graph;
             std::vector<std::vector<size_t>> m_graph;
             std::vector<Node> m_nodes;

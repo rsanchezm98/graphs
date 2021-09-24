@@ -55,6 +55,7 @@ namespace graph
     if(mode == "BFS")
     {
       BFS(m_graph, m_nodes, origin);
+      PrintNodes(m_nodes);
     }
     
     if(mode == "DFS")
@@ -63,19 +64,35 @@ namespace graph
     }
   }
 
+  void Graph::PrintNodes(const std::vector<Node>& nodes)
+  {
+    for(size_t i = 0; i < nodes.size(); i++)
+    {
+      std::cout << "Node: " << nodes[i].id << " -- Parent Node: " << nodes[i].parent_id <<
+                " -- Distance: " << nodes[i].distance << " -- State: " << nodes[i].status << "\n";
+    }
+  }
   bool Graph::BFS(const std::vector<std::vector<size_t>>& graph, std::vector<Node>& nodes, const size_t origin)
   {
     nodes[origin].distance = 0;
-    nodes[origin].status = State::GREY;
-    std::vector<size_t> queue;
-
-    queue.push_back(origin);
+    nodes[origin].status = State::GRAY;
+    std::deque<size_t> queue = {origin};
+    
     while(queue.size())
     {
-      size_t index = queue.pop_front();
-      
+      size_t current_node_id = queue.pop_front();
+      for(size_t i = 0; i < graph[current_node_id].size(); i++)
+      {
+        if(nodes[i].status == State::WHITE)
+        {
+          nodes[i].status = State::GRAY;
+          nodes[i].distance = nodes[current_node_id].distance + 1;
+          nodes[i].parent_id = nodes[current_node_id].id;
+          queue.push_back(i);
+        }
+      }
+      nodes[current_node_id].status = State::BLACK;
     }
-
     return true;
   }
 
