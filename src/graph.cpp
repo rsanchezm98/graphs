@@ -66,7 +66,7 @@ namespace graph
   bool Graph::BFS(const std::vector<std::vector<size_t>>& graph, std::vector<Node>& nodes, const size_t origin)
   {
     nodes[origin].distance = 0;
-    nodes[origin].status = State::Gray;
+    nodes[origin].status = State::GREY;
     std::vector<size_t> queue;
 
     queue.push_back(origin);

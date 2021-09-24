@@ -43,5 +43,5 @@ namespace graph
             size_t m_size_of_graph;
             std::vector<std::vector<size_t>> m_graph;
             std::vector<Node> m_nodes;
-    }
+    };
 }
