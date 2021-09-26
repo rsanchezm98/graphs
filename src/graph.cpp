@@ -21,6 +21,8 @@ namespace graph
         node.parent_id = NOT_DEFINED;
         node.status = State::WHITE;
         node.distance = NOT_DEFINED;
+        node.init_timestamp = NOT_DEFINED;
+        node.fin_timestamp = NOT_DEFINED;
         m_nodes.push_back(node);
       }
     }
@@ -55,12 +57,15 @@ namespace graph
     if(mode == "BFS")
     {
       BFS(m_graph, m_nodes, origin);
+      std::cout << "Final status of the graph nodes:\n";
       PrintNodes(m_nodes);
     }
     
     if(mode == "DFS")
     {
-      DFS(m_graph, m_nodes, origin);
+      DFS(m_graph, m_nodes);
+      std::cout << "Final status of the graph nodes:\n";
+      PrintNodes(m_nodes);      
     }
   }
 
@@ -69,35 +74,106 @@ namespace graph
     for(size_t i = 0; i < nodes.size(); i++)
     {
       std::cout << "Node: " << nodes[i].id << " -- Parent Node: " << nodes[i].parent_id <<
-                " -- Distance: " << nodes[i].distance << " -- State: " << nodes[i].status << "\n";
+                " -- Distance: " << nodes[i].distance << " -- State: " << StateToText(nodes[i].status) <<
+                " -- First Time Explored: " << nodes[i].init_timestamp << " -- Last Time Explored: " << nodes[i].fin_timestamp << "\n";
     }
   }
+
+  std::string Graph::StateToText(const State& state)
+  {
+    if(state == State::WHITE)
+    {
+      return "white";
+    }
+    if(state == State::BLACK)
+    {
+      return "black";
+    }
+
+    if(state == State::GRAY)
+    {
+      return "gray";
+    }
+
+    return "NOT DEFINED"; 
+  }
+
   bool Graph::BFS(const std::vector<std::vector<size_t>>& graph, std::vector<Node>& nodes, const size_t origin)
   {
     nodes[origin].distance = 0;
     nodes[origin].status = State::GRAY;
     std::deque<size_t> queue = {origin};
+
+    size_t iterations_count = 0;
     
     while(queue.size())
     {
-      size_t current_node_id = queue.pop_front();
-      for(size_t i = 0; i < graph[current_node_id].size(); i++)
+      size_t current_node_id = queue[0];
+      queue.pop_front();
+      iterations_count++;
+      nodes[current_node_id].init_timestamp = iterations_count;
+
+      for(auto& id : graph[current_node_id])
       {
-        if(nodes[i].status == State::WHITE)
+        if(nodes[id].status == State::WHITE)
         {
-          nodes[i].status = State::GRAY;
-          nodes[i].distance = nodes[current_node_id].distance + 1;
-          nodes[i].parent_id = nodes[current_node_id].id;
-          queue.push_back(i);
+          nodes[id].status = State::GRAY;
+          nodes[id].distance = nodes[current_node_id].distance + 1;
+          nodes[id].parent_id = nodes[current_node_id].id;
+          queue.push_back(nodes[id].id);
         }
       }
       nodes[current_node_id].status = State::BLACK;
+      nodes[current_node_id].fin_timestamp = iterations_count;
+
+      std::cout << "Current Evaluated Node: " << current_node_id << " -- Queue: ";
+      for(size_t i = 0; i < queue.size(); i++)
+      {
+        std::cout << queue[i] << ", ";
+      }
+      std::cout << "\n";
     }
+
+    std::cout << "Iterations Count: " << iterations_count << "\n";
     return true;
   }
 
-  bool Graph::DFS(const std::vector<std::vector<size_t>>& graph, std::vector<Node>& nodes, const size_t origin)
+  bool Graph::DFS(const std::vector<std::vector<size_t>>& graph, std::vector<Node>& nodes)
   {
+    size_t iterations_count = 0;
+    for(auto& node : nodes)
+    {
+      if(node.status == State::WHITE)
+      {
+        RecursiveDFS(graph, nodes, node, iterations_count);
+      }
+    }
+    std::cout << "Iterations Count: " << iterations_count << "\n";
+
+    return true;
+  }
+
+  bool Graph::RecursiveDFS(const std::vector<std::vector<size_t>>& graph, std::vector<Node>& nodes, Node& node, size_t& iterations_count)
+  {
+    iterations_count++;
+    node.init_timestamp = iterations_count;
+    node.status = State::GRAY;
+
+    std::cout << "Exploring for the first time node_id: " << node.id << " -- Iter Count: " << iterations_count << "\n";
+
+    for(auto& node_id_adj : graph[node.id])
+    {
+      if(nodes[node_id_adj].status == State::WHITE)
+      {
+        nodes[node_id_adj].parent_id = node.id;
+        RecursiveDFS(graph, nodes, nodes[node_id_adj], iterations_count);
+      }
+    }
+
+    node.status = State::BLACK;
+    iterations_count++;
+    node.fin_timestamp = iterations_count;
+    std::cout << "Closing the node_id: " << node.id << " -- Iter Count: " << iterations_count << "\n";
     return true;
   }
 

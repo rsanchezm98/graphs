@@ -12,6 +12,8 @@ namespace graph
         size_t distance;
         size_t id;
         size_t parent_id;
+        size_t init_timestamp;
+        size_t fin_timestamp;
     };
 
     class Graph
@@ -37,10 +39,16 @@ namespace graph
             bool BFS(const std::vector<std::vector<size_t>>& graph, std::vector<Node>& nodes, const size_t origin);
 
             // DFS
-            bool DFS(const std::vector<std::vector<size_t>>& graph, std::vector<Node>& nodes, const size_t origin);
+            bool DFS(const std::vector<std::vector<size_t>>& graph, std::vector<Node>& nodes);
             
-            // Print Nodes Info
-            void Graph::PrintNodes(const std::vector<Node>& nodes);
+            // PrintNodes
+            void PrintNodes(const std::vector<Node>& nodes);
+            
+            // StateToText
+            std::string StateToText(const State& state);
+
+            // RecursiveDFS
+            bool RecursiveDFS(const std::vector<std::vector<size_t>>& graph, std::vector<Node>& nodes, Node& node, size_t& iterations_count);
             
         private:
             size_t m_size_of_graph;
