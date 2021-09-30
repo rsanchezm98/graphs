@@ -14,7 +14,60 @@ namespace graph
         // initialize the graph
         std::vector<size_t> empty_vector;
         m_graph.push_back(empty_vector);
+      }
 
+      InitializeGraph();
+    }
+  
+  
+  Graph::Graph(const std::string& filename)
+  {
+    ReadGraph(filename);
+    InitializeGraph();
+  }
+
+  void Graph::ReadGraph(const std::string& filename)
+  {
+    std::cout << "Filename: " << filename << "\n";
+    std::ifstream source;
+    source.open(filename);
+    std::string line;
+    
+    while(std::getline(source, line))
+    {
+      if(line[0] == "c")
+      {
+        std::string name = "number_of_nodes: ";
+        size_t position_of_node = line.find(name);
+        size_t end_of_name = name.length();
+        
+        std::string number_of_nodes = line.substr(position_of_node + end_of_name, line.length());
+        m_size_of_graph = std::stoi(number_of_nodes);
+        std::cout << m_size_of_graph << "\n";
+
+        for(size_t i = 0; i < m_size_of_graph; i++)
+        {
+          // initialize the graph
+          std::vector<size_t> empty_vector;
+          m_graph.push_back(empty_vector);
+        }
+      }
+
+      if(line[0] == "e")
+      {
+        size_t origin = static_cast<size_t>(std::stoi(line[2]));
+        size_t end = static_cast<size_t>(std::stoi(line[4]));
+
+        // add edges
+        m_graph[origin].push_back(end);
+      }
+    }
+  }
+  void Graph::InitializeGraph()
+  {
+      // initialize the size of the vector
+      for(size_t i = 0; i < m_size_of_graph; i++)
+      {
         // initialize the nodes
         Node node;
         node.id = i;
@@ -25,8 +78,29 @@ namespace graph
         node.fin_timestamp = NOT_DEFINED;
         m_nodes.push_back(node);
       }
+  }
+
+  void Graph::InitializeGraph()
+  {
+    // initialize the size of the vector
+    for(size_t i = 0; i < m_size_of_graph; i++)
+    {
+      // initialize the graph
+      std::vector<size_t> empty_vector;
+      m_graph.push_back(empty_vector);
+
+      // initialize the nodes
+      Node node;
+      node.id = i;
+      node.parent_id = NOT_DEFINED;
+      node.status = State::WHITE;
+      node.distance = NOT_DEFINED;
+      node.init_timestamp = NOT_DEFINED;
+      node.fin_timestamp = NOT_DEFINED;
+      m_nodes.push_back(node);
     }
-    
+  }
+
   void Graph::AddEdges(size_t origin, size_t end)
   {
     // add the end vertex to the origin vertex

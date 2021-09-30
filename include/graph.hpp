@@ -1,6 +1,7 @@
 #include <vector>
 #include <iostream>
 #include <deque>
+#include <fstream>
 
 namespace graph
 {
@@ -22,6 +23,7 @@ namespace graph
 
             // Constructor
             Graph(const size_t size_of_graph);
+            Graph(const std::string& filename);
 
             // AddEdges
             void AddEdges(size_t origin, size_t end);
@@ -49,6 +51,11 @@ namespace graph
 
             // RecursiveDFS
             bool RecursiveDFS(const std::vector<std::vector<size_t>>& graph, std::vector<Node>& nodes, Node& node, size_t& iterations_count);
+            
+            // InitializeGraph
+            void InitializeGraph();
+
+            void ReadGraph(const std::string& filename);
             
         private:
             size_t m_size_of_graph;
