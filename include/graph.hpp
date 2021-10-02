@@ -2,6 +2,7 @@
 #include <iostream>
 #include <deque>
 #include <fstream>
+#include <string>
 
 namespace graph
 {

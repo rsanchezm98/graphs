@@ -35,7 +35,7 @@ namespace graph
     
     while(std::getline(source, line))
     {
-      if(line[0] == "c")
+      if(line[0] == 'c')
       {
         std::string name = "number_of_nodes: ";
         size_t position_of_node = line.find(name);
@@ -53,15 +53,20 @@ namespace graph
         }
       }
 
-      if(line[0] == "e")
+      if(line[0] == 'e')
       {
-        size_t origin = static_cast<size_t>(std::stoi(line[2]));
-        size_t end = static_cast<size_t>(std::stoi(line[4]));
+        size_t origin = line[2] - '0';
+        size_t end = line[4] - '0';
+
+        std::cout << "Origin: " << origin << " -- End: " << end << "\n";
 
         // add edges
         m_graph[origin].push_back(end);
       }
     }
+
+    std::cout << "Graph loaded...\n";
+    std::cout << "[stats]: Vertex size " << m_graph.size() << "\n";
   }
   void Graph::InitializeGraph()
   {
@@ -78,27 +83,6 @@ namespace graph
         node.fin_timestamp = NOT_DEFINED;
         m_nodes.push_back(node);
       }
-  }
-
-  void Graph::InitializeGraph()
-  {
-    // initialize the size of the vector
-    for(size_t i = 0; i < m_size_of_graph; i++)
-    {
-      // initialize the graph
-      std::vector<size_t> empty_vector;
-      m_graph.push_back(empty_vector);
-
-      // initialize the nodes
-      Node node;
-      node.id = i;
-      node.parent_id = NOT_DEFINED;
-      node.status = State::WHITE;
-      node.distance = NOT_DEFINED;
-      node.init_timestamp = NOT_DEFINED;
-      node.fin_timestamp = NOT_DEFINED;
-      m_nodes.push_back(node);
-    }
   }
 
   void Graph::AddEdges(size_t origin, size_t end)

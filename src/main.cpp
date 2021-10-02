@@ -16,17 +16,17 @@ int main()
   graph.AddEdges(1,5);
   */
 
-  std::string filename = "graphs/graph_20210930.txt";
+  std::string filename = "../graphs/graph_20210930.txt";
 
   /* another version to create the graph */
   graph::Graph graph(filename);
   
   graph.PrintGraph();
-  //std::cout << "********** BFS solution **********\n";  
-  //graph.SolveGraph("BFS", 0);
+  std::cout << "********** BFS solution **********\n";  
+  graph.SolveGraph("BFS", 0);
 
-  std::cout << "********** DFS solution **********\n";
-  graph.SolveGraph("DFS", 0);  
+  //std::cout << "********** DFS solution **********\n";
+  //graph.SolveGraph("DFS", 0);  
 
   return 0;
 }
